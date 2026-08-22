@@ -1,0 +1,29 @@
+# Dependencies and package-manager artifacts
+desktop/node_modules/
+desktop/.pnpm-store/
+
+# Development and production build outputs
+desktop/dist/
+desktop/dist-electron/
+desktop/release/
+desktop/.vite/
+
+# Local configuration, credentials, and Electron user data
+.env
+.env.*
+!.env.example
+provider-settings.bin
+*.pem
+*.key
+
+# Local logs, temporary files, and operating-system files
+*.log
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Test and local runtime output
+coverage/
+playwright-report/
+test-results/

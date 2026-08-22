@@ -1,0 +1,66 @@
+{
+  "name": "nuvora-webforge-desktop",
+  "productName": "Nuvora WebForge",
+  "version": "2.0.0",
+  "description": "Nuvora WebForge is an AI-powered Windows desktop website builder with Gemini and local LLM support.",
+  "author": "Nuvora WebForge",
+  "private": true,
+  "type": "module",
+  "main": "dist-electron/main.js",
+  "scripts": {
+    "dev": "concurrently -k -n UI,ELECTRON -c cyan,magenta \"pnpm:dev:ui\" \"pnpm:dev:electron\"",
+    "dev:ui": "vite --host 127.0.0.1",
+    "dev:electron": "tsc -p tsconfig.electron.json && wait-on tcp:5173 && cross-env ELECTRON_START_URL=http://127.0.0.1:5173 electron .",
+    "build": "tsc -b && vite build && tsc -p tsconfig.electron.json",
+    "start": "electron .",
+    "package:win": "pnpm build && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --win nsis --publish never",
+    "lint": "oxlint src electron",
+    "preview": "vite preview"
+  },
+  "build": {
+    "appId": "com.nuvora.webforge",
+    "productName": "Nuvora WebForge",
+    "artifactName": "Nuvora-WebForge-Setup.${ext}",
+    "asar": true,
+    "files": ["dist/**", "dist-electron/**", "package.json"],
+    "extraResources": [{ "from": "../documentation", "to": "documentation", "filter": ["**/*"] }],
+    "directories": { "buildResources": "build", "output": "release" },
+    "win": {
+      "target": ["nsis"],
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false,
+      "artifactName": "Nuvora-WebForge-Setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "allowElevation": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Nuvora WebForge",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true,
+      "installerLanguages": ["en_US"]
+    }
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "lucide-react": "^1.33.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "concurrently": "^10.0.5",
+    "cross-env": "^10.1.0",
+    "electron": "^43.4.1",
+    "electron-builder": "^26.15.3",
+    "oxlint": "^1.75.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.0",
+    "wait-on": "^9.1.0"
+  }
+}
